@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:bmi_app/bmi_function.dart';
+
 
 class CalculatePage extends StatelessWidget {
   const CalculatePage({super.key});
