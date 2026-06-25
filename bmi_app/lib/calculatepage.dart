@@ -1,21 +1,280 @@
 import 'package:flutter/material.dart';
 
-class CalculatePage extends StatelessWidget {
+class CalculatePage extends StatefulWidget {
   const CalculatePage({super.key});
+
+  @override
+  State<CalculatePage> createState() => _CalculatePageState();
+}
+
+class _CalculatePageState extends State<CalculatePage> {
+  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+
+  double? _bmi;
+  String _advice = '';
+
+  static const Color _bgGreen = Color(0xFF4A9B6F);
+  static const Color _cardYellow = Color(0xFFFFF1B7);
+  static const Color _borderGold = Color(0xFFD1C27F);
+  static const Color _darkGreen = Color(0xFF1B4D35);
+  static const Color _brightGreen = Color(0xFF2E7D32);
+
+  void _calculate() {
+    final double? weight = double.tryParse(_weightController.text);
+    final double? height = double.tryParse(_heightController.text);
+
+    if (weight == null || height == null || height == 0) return;
+
+    final double heightM = height / 100;
+    final double bmi = weight / (heightM * heightM);
+
+    String advice;
+    if (bmi < 18.5) {
+      advice =
+          'Your BMI indicates you are underweight. Consider eating more nutrient-rich foods and consulting a healthcare provider for personalized guidance.';
+    } else if (bmi < 25) {
+      advice =
+          'Great job! Your BMI is in the normal range. Keep maintaining a balanced diet and regular physical activity to stay healthy.';
+    } else if (bmi < 30) {
+      advice =
+          'Your BMI indicates you are overweight. Try to incorporate more physical activity and a balanced diet into your daily routine.';
+    } else {
+      advice =
+          'Your BMI indicates obesity. It is recommended to consult a healthcare professional for a personalized plan to improve your health.';
+    }
+
+    setState(() {
+      _bmi = bmi;
+      _advice = advice;
+    });
+  }
+
+  @override
+  void dispose() {
+    _weightController.dispose();
+    _heightController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _bgGreen,
       appBar: AppBar(
-        title: const Text('Calculate BMI'),
-        backgroundColor: Colors.blue,
+        backgroundColor: _bgGreen,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).maybePop(),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(width: 12),
+              Icon(Icons.arrow_back, color: Colors.white, size: 22),
+              SizedBox(width: 4),
+              Text(
+                'Home',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+        leadingWidth: 100,
       ),
-      body: const Center(
-        child: Text(
-          'นี่คือหน้าคำนวณ BMI',
-          style: TextStyle(fontSize: 24),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Input card
+            _buildInputCard(),
+            const SizedBox(height: 20),
+
+            // BMI result card
+            if (_bmi != null) ...[
+              _buildBmiCard(),
+              const SizedBox(height: 24),
+
+              // Advice section
+              _buildAdviceSection(),
+            ],
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInputCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: _cardYellow,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: _borderGold, width: 7),
+      ),
+      padding: const EdgeInsets.fromLTRB(28, 36, 28, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Weight field
+          const Text(
+            'Weight ( kg. )',
+            style: TextStyle(
+              color: _darkGreen,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _weightController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            style: const TextStyle(color: _darkGreen, fontSize: 16),
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(color: _darkGreen, width: 1.5),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: _darkGreen, width: 1.5),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: _darkGreen, width: 2),
+              ),
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 6),
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // Height field
+          const Text(
+            'Height ( cm. )',
+            style: TextStyle(
+              color: _darkGreen,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _heightController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            style: const TextStyle(color: _darkGreen, fontSize: 16),
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(color: _darkGreen, width: 1.5),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: _darkGreen, width: 1.5),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: _darkGreen, width: 2),
+              ),
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(vertical: 6),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Calculate button — right-aligned
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              onPressed: _calculate,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _borderGold,
+                foregroundColor: _darkGreen,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 10,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              child: const Text('Calculate'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBmiCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: _cardYellow,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: _borderGold, width: 7),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          const Text(
+            'BMI',
+            style: TextStyle(
+              color: _darkGreen,
+              fontSize: 40,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            _bmi!.toStringAsFixed(2),
+            style: const TextStyle(
+              color: _brightGreen,
+              fontSize: 44,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          const SizedBox(width: 8),
+          const Text(
+            '(kg/m²)',
+            style: TextStyle(
+              color: _darkGreen,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAdviceSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Advice :',
+          style: TextStyle(
+            color: _cardYellow,
+            fontSize: 34,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          _advice,
+          style: const TextStyle(
+            color: _cardYellow,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            height: 1.55,
+          ),
+        ),
+      ],
     );
   }
 }
