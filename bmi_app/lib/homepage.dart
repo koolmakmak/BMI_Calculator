@@ -12,19 +12,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BMI Calculator'),
-        backgroundColor: const Color.fromRGBO(83, 157, 121, 1),
-      ),
+      backgroundColor: const Color.fromRGBO(83, 157, 121, 1),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
               'Let calculate your BMI',
-              style: TextStyle(fontSize: 80),
+              style: TextStyle(fontSize: 80, color: Colors.white),
             ),
-            const SizedBox(height: 80),
+            const SizedBox(height: 60),
+            Image.asset('assets/images/Chen1.jpg', width: 250, height: 250, fit: BoxFit.cover),
+            const SizedBox(height: 60),
             ElevatedButton(onPressed: () {
               Navigator.push(
                 context, 
