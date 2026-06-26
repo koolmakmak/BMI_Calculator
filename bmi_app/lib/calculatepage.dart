@@ -104,7 +104,7 @@ class _CalculatePageState extends State<CalculatePage> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.normal,
                 ),
               ),
             ],
@@ -152,7 +152,7 @@ class _CalculatePageState extends State<CalculatePage> {
             style: TextStyle(
               color: _darkGreen,
               fontSize: 16,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.normal,
             ),
           ),
           const SizedBox(height: 6),
@@ -182,7 +182,7 @@ class _CalculatePageState extends State<CalculatePage> {
             style: TextStyle(
               color: _darkGreen,
               fontSize: 16,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.normal,
             ),
           ),
           const SizedBox(height: 6),
@@ -219,7 +219,7 @@ class _CalculatePageState extends State<CalculatePage> {
                 ),
                 textStyle: const TextStyle(
                   fontSize: 15,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.normal,
                 ),
               ),
               child: const Text('Calculate'),
@@ -247,7 +247,7 @@ class _CalculatePageState extends State<CalculatePage> {
             style: TextStyle(
               color: _darkGreen,
               fontSize: 40,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               letterSpacing: 1,
             ),
           ),
@@ -257,7 +257,7 @@ class _CalculatePageState extends State<CalculatePage> {
             style: const TextStyle(
               color: _brightGreen,
               fontSize: 44,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.normal,
             ),
           ),
           const SizedBox(width: 8),
@@ -266,7 +266,7 @@ class _CalculatePageState extends State<CalculatePage> {
             style: TextStyle(
               color: _darkGreen,
               fontSize: 16,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.normal,
             ),
           ),
         ],
@@ -283,7 +283,7 @@ class _CalculatePageState extends State<CalculatePage> {
           style: TextStyle(
             color: _cardYellow,
             fontSize: 34,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.normal,
           ),
         ),
         const SizedBox(height: 12),
@@ -292,7 +292,7 @@ class _CalculatePageState extends State<CalculatePage> {
           style: const TextStyle(
             color: _cardYellow,
             fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.normal,
             height: 1.55,
           ),
         ),
