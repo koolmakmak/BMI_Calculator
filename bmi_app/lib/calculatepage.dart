@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bmi_app/bmi_function.dart';
 
-
 class CalculatePage extends StatefulWidget {
   const CalculatePage({super.key});
 
@@ -23,32 +22,58 @@ class _CalculatePageState extends State<CalculatePage> {
   static const Color _brightGreen = Color(0xFF2E7D32);
 
   void _calculate() {
-    final double? weight = double.tryParse(_weightController.text);
-    final double? height = double.tryParse(_heightController.text);
+    final String weightText = _weightController.text.trim();
+    final String heightText = _heightController.text.trim();
 
-    if (weight == null || height == null || height == 0) return;
-
-    final double heightM = height / 100;
-    final double bmi = weight / (heightM * heightM);
-
-    String advice;
-    if (bmi < 18.5) {
-      advice =
-          'Your BMI indicates you are underweight. Consider eating more nutrient-rich foods and consulting a healthcare provider for personalized guidance.';
-    } else if (bmi < 25) {
-      advice =
-          'Great job! Your BMI is in the normal range. Keep maintaining a balanced diet and regular physical activity to stay healthy.';
-    } else if (bmi < 30) {
-      advice =
-          'Your BMI indicates you are overweight. Try to incorporate more physical activity and a balanced diet into your daily routine.';
-    } else {
-      advice =
-          'Your BMI indicates obesity. It is recommended to consult a healthcare professional for a personalized plan to improve your health.';
+    void _showWarning(String message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.red[600],
+          duration: const Duration(seconds: 2),
+        ),
+      );
     }
 
+    if (weightText.isEmpty) {
+      _showWarning('Please enter your weight');
+      return;
+    }
+
+    if (heightText.isEmpty) {
+      _showWarning('Please enter your height');
+      return;
+    }
+
+    final double? weight = double.tryParse(weightText);
+    final double? height = double.tryParse(heightText);
+
+    if (weight == null) {
+      _showWarning('Weight must be a valid number');
+      return;
+    }
+
+    if (height == null) {
+      _showWarning('Height must be a valid number');
+      return;
+    }
+
+    if (weight <= 0) {
+      _showWarning('Weight must be greater than 0');
+      return;
+    }
+
+    if (height <= 0) {
+      _showWarning('Height must be greater than 0');
+      return;
+    }
+
+    final double heightM = height / 100;
+    final bmiInstance = Bmi(weightKg: weight, heightM: heightM);
+
     setState(() {
-      _bmi = bmi;
-      _advice = advice;
+      _bmi = bmiInstance.value;
+      _advice = bmiInstance.advice;
     });
   }
 
@@ -189,11 +214,6 @@ class _CalculatePageState extends State<CalculatePage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: _borderGold,
                 foregroundColor: _darkGreen,
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 10,
-                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
