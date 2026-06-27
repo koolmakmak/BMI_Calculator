@@ -12,6 +12,7 @@ class CalculatePage extends StatefulWidget {
 class _CalculatePageState extends State<CalculatePage> {
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
+  final BmiHistory _history = BmiHistory();
 
   double? _bmi;
   String _advice = '';
@@ -21,6 +22,39 @@ class _CalculatePageState extends State<CalculatePage> {
   static const Color _borderGold = Color(0xFFD1C27F);
   static const Color _darkGreen = Color(0xFF1B4D35);
   static const Color _brightGreen = Color(0xFF2E7D32);
+
+  @override
+  void initState() {
+    super.initState();
+    _restoreLatestResult();
+  }
+
+  void _restoreLatestResult() {
+    final latest = _history.latestRecord;
+    if (latest == null) {
+      return;
+    }
+
+    final bmiResult = Bmi(weightKg: latest.weightKg, heightM: latest.heightM);
+    _weightController.text = latest.weightKg.toString();
+    _heightController.text = (latest.heightM * 100).toStringAsFixed(0);
+
+    setState(() {
+      _bmi = bmiResult.value;
+      _advice = bmiResult.advice;
+    });
+  }
+
+  void _clearHistory() {
+    _history.clearHistory();
+    _weightController.clear();
+    _heightController.clear();
+
+    setState(() {
+      _bmi = null;
+      _advice = '';
+    });
+  }
 
   void _calculate() {
     final String weightText = _weightController.text.trim();
@@ -71,6 +105,8 @@ class _CalculatePageState extends State<CalculatePage> {
 
     final double heightM = height / 100;
     final bmiInstance = Bmi(weightKg: weight, heightM: heightM);
+
+    _history.addNewRecord(bmiInstance.value, heightM, weight, bmiInstance.type);
 
     setState(() {
       _bmi = bmiInstance.value;
@@ -207,23 +243,47 @@ class _CalculatePageState extends State<CalculatePage> {
           ),
           const SizedBox(height: 24),
 
-          // Calculate button — right-aligned
+          // Calculate + Clear buttons — right-aligned
           Align(
             alignment: Alignment.centerRight,
-            child: ElevatedButton(
-              onPressed: _calculate,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _borderGold,
-                foregroundColor: _darkGreen,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: _calculate,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _borderGold,
+                    foregroundColor: _darkGreen,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  child: const Text('Calculate'),
                 ),
-                textStyle: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              child: const Text('Calculate'),
+                if (_bmi != null) ...[
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: _clearHistory,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: _darkGreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(color: _darkGreen, width: 1.5),
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    child: const Text('Clear'),
+                  ),
+                ],
+              ],
             ),
           ),
         ],
