@@ -8,18 +8,27 @@ class BmiRecord{
 ;}
 
 class BmiHistory {
+  BmiHistory._internal();
+
+  static final BmiHistory _instance = BmiHistory._internal();
+
+  factory BmiHistory() => _instance;
+
   static final List<BmiRecord> _history = [];
 
   List<BmiRecord> get history => _history;
 
+  BmiRecord? get latestRecord => _history.isEmpty ? null : _history.last;
+
   void addNewRecord(double bmi, double heightM, double weightKg, String type) {
     _history.add(
       BmiRecord(
-        bmi: bmi, 
-        heightM: heightM, 
+        bmi: bmi,
+        heightM: heightM,
         weightKg: weightKg,
         type: type,
-        date: DateTime.now().toString())
+        date: DateTime.now().toString(),
+      ),
     );
   }
 
