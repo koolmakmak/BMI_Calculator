@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bmi_app/bmi_function.dart';
+import 'package:bmi_app/history_function.dart';
 
 class CalculatePage extends StatefulWidget {
   const CalculatePage({super.key});
