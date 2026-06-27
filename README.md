@@ -24,7 +24,6 @@ A clean and simple **Body Mass Index (BMI) Calculator** mobile application built
 ---
 
 ## 🚀 Getting Started
-- use flutter run -d chrome in bmi_app
 
 ### Prerequisites
 
@@ -88,13 +87,13 @@ bmi_app/
 ## 👤 Author
 
 **koolmakmak**
-- GitHub: [@koolmakmak](https://github.com/koolmakmak)
+- GitHub: [@koolmakmak](/https://github.com/koolmakmak)
 
 **n1ssinnnn**
-- GitHub: [@n1ssinnnn] (https://github.com/n1ssinnnn)
+- GitHub: [@n1ssinnnn](https://github.com/n1ssinnnn)
 
 **meoahanmeow**
-- GitHub: [@meoahanmeow] (https://github.com/meoahanmeow)
+- GitHub: [@meoahanmeow](https://github.com/meoahanmeow)
 
 ---
 
