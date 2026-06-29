@@ -16,6 +16,7 @@ class _CalculatePageState extends State<CalculatePage> {
 
   double? _bmi;
   String _advice = '';
+  String _selectedGender = 'Male';
 
   static const Color _bgGreen = Color(0xFF4A9B6F);
   static const Color _cardYellow = Color(0xFFFFF1B7);
@@ -35,7 +36,11 @@ class _CalculatePageState extends State<CalculatePage> {
       return;
     }
 
-    final bmiResult = Bmi(weightKg: latest.weightKg, heightM: latest.heightM);
+    final bmiResult = Bmi(
+      weightKg: latest.weightKg,
+      heightM: latest.heightM,
+      gender: _selectedGender,
+    );
     _weightController.text = latest.weightKg.toString();
     _heightController.text = (latest.heightM * 100).toStringAsFixed(0);
 
@@ -53,6 +58,7 @@ class _CalculatePageState extends State<CalculatePage> {
     setState(() {
       _bmi = null;
       _advice = '';
+      _selectedGender = 'Male';
     });
   }
 
@@ -104,7 +110,11 @@ class _CalculatePageState extends State<CalculatePage> {
     }
 
     final double heightM = height / 100;
-    final bmiInstance = Bmi(weightKg: weight, heightM: heightM);
+    final bmiInstance = Bmi(
+      weightKg: weight,
+      heightM: heightM,
+      gender: _selectedGender,
+    );
 
     _history.addNewRecord(bmiInstance.value, heightM, weight, bmiInstance.type);
 
@@ -240,6 +250,61 @@ class _CalculatePageState extends State<CalculatePage> {
               isDense: true,
               contentPadding: EdgeInsets.symmetric(vertical: 6),
             ),
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            'Gender',
+            style: TextStyle(
+              color: _darkGreen,
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Radio<String>(
+                    value: 'Male',
+                    groupValue: _selectedGender,
+                    activeColor: _darkGreen,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedGender = value!;
+                      });
+                    },
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    'Male',
+                    style: TextStyle(color: _darkGreen, fontSize: 16),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 32),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Radio<String>(
+                    value: 'Female',
+                    groupValue: _selectedGender,
+                    activeColor: _darkGreen,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedGender = value!;
+                      });
+                    },
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    'Female',
+                    style: TextStyle(color: _darkGreen, fontSize: 16),
+                  ),
+                ],
+              ),
+            ],
           ),
           const SizedBox(height: 24),
 
