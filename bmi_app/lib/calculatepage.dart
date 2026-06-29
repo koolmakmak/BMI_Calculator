@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bmi_app/bmi_function.dart';
 import 'package:bmi_app/history_function.dart';
+import 'package:bmi_app/redirectlinkfunction.dart';
 
 class CalculatePage extends StatefulWidget {
   const CalculatePage({super.key});
@@ -16,6 +17,7 @@ class _CalculatePageState extends State<CalculatePage> {
 
   double? _bmi;
   String _advice = '';
+  String? _adviceUrl;
   String _selectedGender = 'Male';
 
   static const Color _bgGreen = Color(0xFF4A9B6F);
@@ -47,6 +49,7 @@ class _CalculatePageState extends State<CalculatePage> {
     setState(() {
       _bmi = bmiResult.value;
       _advice = bmiResult.advice;
+      _adviceUrl = getAdviceRedirectLink(bmiResult.type);
     });
   }
 
@@ -121,7 +124,13 @@ class _CalculatePageState extends State<CalculatePage> {
     setState(() {
       _bmi = bmiInstance.value;
       _advice = bmiInstance.advice;
+      _adviceUrl = getAdviceRedirectLink(bmiInstance.type);
     });
+  }
+
+  Future<void> _openAdviceLink() async {
+    if (_adviceUrl == null) return;
+    await openRedirectLink(_adviceUrl!);
   }
 
   @override
@@ -422,6 +431,25 @@ class _CalculatePageState extends State<CalculatePage> {
             height: 1.55,
           ),
         ),
+        if (_adviceUrl != null) ...[
+          const SizedBox(height: 14),
+          TextButton(
+            onPressed: _openAdviceLink,
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              alignment: Alignment.centerLeft,
+            ),
+            child: const Text(
+              'See more recommended food',
+              style: TextStyle(
+                color: Color.fromARGB(255, 231, 71, 92),
+                fontSize: 16,
+                decoration: TextDecoration.underline,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }
