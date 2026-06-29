@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 class Bmi {
   final double weightKg;
   final double heightM;
-  const Bmi({required this.weightKg, required this.heightM});
+  final String gender;
+
+  const Bmi({
+    required this.weightKg,
+    required this.heightM,
+    required this.gender,
+  });
 
   double get value {
     if (weightKg <= 0 || heightM <= 0 || heightM > 2.5 || weightKg > 250) {
@@ -26,7 +32,10 @@ class Bmi {
       case 'Underweight':
         return 'You are below the normal weight range. Try to eat more food and go bulk.';
       case 'Normal weight':
-        return 'Your BMI is within the healthy range. Good Boy!';
+        final praise = (gender.toLowerCase() == 'male')
+            ? 'Good Boy!'
+            : 'Good Girl!';
+        return 'Your BMI is within the healthy range. $praise';
       case 'Overweight':
         return 'You are above the healthy weight range. More regular exercise and a healthier diet.';
       case 'Obese':
